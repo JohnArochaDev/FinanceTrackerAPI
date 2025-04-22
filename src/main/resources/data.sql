@@ -5,8 +5,8 @@ CREATE TABLE users (
                        password VARCHAR(255) NOT NULL
 );
 
--- Create the snippet table
-CREATE TABLE snippet (
+-- Create the finance table
+CREATE TABLE finance (
                          id INT AUTO_INCREMENT PRIMARY KEY,
                          language VARCHAR(255) NOT NULL,
                          code TEXT NOT NULL,
@@ -18,8 +18,8 @@ CREATE TABLE snippet (
 INSERT INTO users (id, username, password) VALUES
     ('11111111-1111-1111-1111-111111111111', 'john_doe', 'securepassword');
 
--- Insert data into the snippet table, all belonging to the same user
-INSERT INTO snippet (language, code, user_id) VALUES
+-- Insert data into the finance table, all belonging to the same user
+INSERT INTO finance (language, code, user_id) VALUES
                                                   ('Python', 'F6RVvB9M0kTp4c19cp1LlM3QzRiWwvXb/KFuVobMZOE=', '11111111-1111-1111-1111-111111111111'),
                                                   ('Python', 'eUy6pPPPrk7LnN+UN/Fpk5ae+RqpVhfxsy7bAJxUcSfZKP5imWpAAt+6XfQx51wr', '11111111-1111-1111-1111-111111111111'),
                                                   ('Python', 'NsFc1ycGXZu3iSpUqSWXkcTpzuNWpid09Fn3XuESlXIL9DV0muLnmV08sWJriDtgg9JQvzWuXH5hNyfRK85bF3qIsh82yDgfRmsg2oONoc7TmVmVDQ5E0dr0CM1QJs3Ii3aeEvKiiopC/uBdul7NTWh5f3HqbC7r1b/h2OJsLXRW9P773utyJcgLjBus+dAH', '11111111-1111-1111-1111-111111111111'),

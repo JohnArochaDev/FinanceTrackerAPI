@@ -110,7 +110,7 @@ public class FinanceServiceImpl implements FinanceService {
 
         Chart updatedChart = existingChart.get();
         updatedChart.setLabels(chart.getLabels());
-        updatedChart.setDataset(chart.getDataset());
+        updatedChart.setDatasets(chart.getDatasets());
 
         return chartRepository.save(updatedChart);
     }

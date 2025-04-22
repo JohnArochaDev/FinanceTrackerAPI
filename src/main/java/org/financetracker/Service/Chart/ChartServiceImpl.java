@@ -45,7 +45,7 @@ public class ChartServiceImpl implements ChartService {
 
         Chart updatedChart = existingChart.get();
         updatedChart.setLabels(chart.getLabels());
-        updatedChart.setDataset(chart.getDataset());
+        updatedChart.setDatasets(chart.getDatasets());
 
         return chartRepository.save(updatedChart);
     }

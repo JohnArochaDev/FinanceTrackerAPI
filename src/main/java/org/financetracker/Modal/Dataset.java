@@ -1,8 +1,12 @@
 package org.financetracker.Modal;
 
+import static org.financetracker.Security.Encryption.AesEncryptionUtil.encrypt;
+import static org.financetracker.Security.Encryption.AesEncryptionUtil.decrypt;
+
 import jakarta.persistence.*;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 public class Dataset {
@@ -29,6 +33,78 @@ public class Dataset {
     @ManyToOne
     @JoinColumn(name = "chart_id", nullable = false)
     private Chart chart; // Many datasets can belong to one chart
+
+    // Methods
+    public void encryptFields(String encryptionKey) {
+        try {
+            this.label = encrypt(this.label, encryptionKey);
+            this.data = this.data.stream()
+                .map(value -> {
+                    try {
+                        return Double.parseDouble(encrypt(String.valueOf(value), encryptionKey));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .collect(Collectors.toList());
+            this.backgroundColor = this.backgroundColor.stream()
+                .map(color -> {
+                    try {
+                        return encrypt(color, encryptionKey);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .collect(Collectors.toList());
+            this.borderColor = this.borderColor.stream()
+                .map(color -> {
+                    try {
+                        return encrypt(color, encryptionKey);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to encrypt Dataset fields", e);
+        }
+    }
+
+    // Decrypt all fields
+    public void decryptFields(String encryptionKey) {
+        try {
+            this.label = decrypt(this.label, encryptionKey);
+            this.data = this.data.stream()
+                .map(value -> {
+                    try {
+                        return Double.parseDouble(decrypt(String.valueOf(value), encryptionKey));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .collect(Collectors.toList());
+            this.backgroundColor = this.backgroundColor.stream()
+                .map(color -> {
+                    try {
+                        return decrypt(color, encryptionKey);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .collect(Collectors.toList());
+            this.borderColor = this.borderColor.stream()
+                .map(color -> {
+                    try {
+                        return decrypt(color, encryptionKey);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to decrypt Dataset fields", e);
+        }
+    }
 
     // Getters and Setters
     public UUID getId() {

@@ -148,7 +148,7 @@ public class FinanceController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/charts/{chartId}/datasets")
     public Dataset saveDataset(@PathVariable UUID chartId, @RequestBody Dataset dataset) {
-
+        dataset.encryptFields(ENCRYPTED_KEY);
 
         return datasetService.saveDataset(chartId, dataset);
     }
@@ -156,6 +156,8 @@ public class FinanceController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PutMapping("/datasets/{datasetId}")
     public Dataset updateDataset(@PathVariable UUID datasetId, @RequestBody Dataset dataset) {
+        dataset.encryptFields(ENCRYPTED_KEY);
+
         return datasetService.updateDataset(datasetId, dataset);
     }
 
@@ -168,6 +170,9 @@ public class FinanceController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/datasets/{datasetId}")
     public Dataset getDatasetById(@PathVariable UUID datasetId) {
-        return datasetService.getDatasetById(datasetId);
+        Dataset dataset = datasetService.getDatasetById(datasetId);
+        dataset.decryptFields(ENCRYPTED_KEY);
+
+        return dataset;
     }
 }

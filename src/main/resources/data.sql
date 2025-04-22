@@ -2,7 +2,8 @@
 CREATE TABLE users (
                        id UUID PRIMARY KEY,
                        username VARCHAR(255) NOT NULL,
-                       password VARCHAR(255) NOT NULL
+                       password VARCHAR(255) NOT NULL,
+                       role VARCHAR(50) NOT NULL DEFAULT 'USER' -- Add the role column with a default value
 );
 
 -- Create the finance table
@@ -40,8 +41,8 @@ CREATE TABLE dataset (
 );
 
 -- Insert a single user into the users table
-INSERT INTO users (id, username, password) VALUES
-    ('11111111-1111-1111-1111-111111111111', 'john_doe', 'securepassword');
+INSERT INTO users (id, username, password, role) VALUES
+    ('11111111-1111-1111-1111-111111111111', 'john_doe', 'securepassword', 'ADMIN');
 
 -- Insert data into the finance table
 INSERT INTO finance (id, total_income, total_expenses, deficit, remaining, total_savings, total_debt, user_id) VALUES

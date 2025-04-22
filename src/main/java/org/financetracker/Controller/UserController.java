@@ -49,7 +49,15 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<User> createUser(@RequestBody User user) {
+        // Set default role to USER if not provided
+        if (user.getRole() == null || user.getRole().isEmpty()) {
+            user.setRole("USER");
+        }
+
+        // Encrypt the password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        // Save the user
         User newUser = userService.saveUser(user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);

@@ -99,7 +99,6 @@ public class FinanceController {
     }
 
     // Chart Endpoints
-
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/{financeId}/charts")
     public Chart saveChart(@PathVariable UUID financeId, @RequestBody Chart chart) throws Exception {

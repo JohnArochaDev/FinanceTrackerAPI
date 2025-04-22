@@ -1,5 +1,6 @@
 package org.financetracker.Service.Finance;
 
+import org.financetracker.Modal.Chart;
 import org.financetracker.Modal.Finance;
 
 import java.util.List;
@@ -24,4 +25,13 @@ public interface FinanceService {
 
     // Get all finance records (for admin purposes)
     List<Finance> getAllFinances();
+
+    // Add a chart to a finance record
+    Chart addChartToFinance(UUID financeId, Chart chart);
+
+    // Update a chart in a finance record
+    Chart updateChart(UUID chartId, Chart chart);
+
+    // Delete a chart from a finance record
+    void deleteChart(UUID chartId);
 }

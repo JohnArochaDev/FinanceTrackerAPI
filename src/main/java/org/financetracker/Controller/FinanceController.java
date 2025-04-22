@@ -6,20 +6,12 @@ import org.financetracker.Modal.Finance;
 import org.financetracker.Service.Chart.ChartService;
 import org.financetracker.Service.Dataset.DatasetService;
 import org.financetracker.Service.Finance.FinanceService;
-import org.financetracker.Util.ChartType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.w3c.dom.html.HTMLLabelElement;
 
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
-
-import static org.financetracker.Security.Encryption.AesEncryptionUtil.encrypt;
-import static org.financetracker.Security.Encryption.AesEncryptionUtil.decrypt;
 
 @RestController
 @RequestMapping("/api/finance")

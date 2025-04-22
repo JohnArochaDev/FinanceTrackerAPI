@@ -1,16 +1,14 @@
 package org.financetracker.Modal;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,17 +17,26 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id = UUID.randomUUID();
+    private UUID id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Finance> finances = new ArrayList<>();
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Finance finance;
 
+    // Constructors
+    public User() {}
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    // Getters and Setters
     public UUID getId() {
         return this.id;
     }
@@ -50,21 +57,12 @@ public class User {
         this.password = password;
     }
 
-    public List<Finance> getFinances() {
-        return finances;
+    public Finance getFinance() {
+        return finance;
     }
 
-    public void setFinances(List<Finance> finances) {
-        this.finances = finances;
-    }
-
-    public void addFinance(Finance finance) {
-        finances.add(finance);
+    public void setFinance(Finance finance) {
+        this.finance = finance;
         finance.setUser(this);
-    }
-
-    public void removeFinance(Finance finance) {
-        finances.remove(finance);
-        finance.setUser(null);
     }
 }

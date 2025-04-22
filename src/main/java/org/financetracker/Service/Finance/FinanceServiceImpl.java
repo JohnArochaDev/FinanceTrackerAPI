@@ -55,7 +55,6 @@ public class FinanceServiceImpl implements FinanceService {
         updatedFinance.setRemaining(finance.getRemaining());
         updatedFinance.setTotalSavings(finance.getTotalSavings());
         updatedFinance.setTotalDebt(finance.getTotalDebt());
-        updatedFinance.setCode(finance.getCode());
 
         return financeRepository.save(updatedFinance);
     }

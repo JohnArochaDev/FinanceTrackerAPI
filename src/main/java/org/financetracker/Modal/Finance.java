@@ -1,7 +1,11 @@
 package org.financetracker.Modal;
 
+import static org.financetracker.Security.Encryption.AesEncryptionUtil.encrypt;
+import static org.financetracker.Security.Encryption.AesEncryptionUtil.decrypt;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -33,9 +37,6 @@ public class Finance {
     @Column(nullable = false)
     private double totalDebt;
 
-    @Column(nullable = false, unique = true)
-    private String code;
-
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -53,7 +54,25 @@ public class Finance {
         this.remaining = remaining;
         this.totalSavings = totalSavings;
         this.totalDebt = totalDebt;
-        this.code = code;
+    }
+
+    // Methods
+    public void encryptFields(String encryptionKey) throws Exception {
+        this.totalIncome = Double.parseDouble(encrypt(String.valueOf(this.totalIncome), encryptionKey));
+        this.totalExpenses = Double.parseDouble(encrypt(String.valueOf(this.totalExpenses), encryptionKey));
+        this.deficit = Double.parseDouble(encrypt(String.valueOf(this.deficit), encryptionKey));
+        this.remaining = Double.parseDouble(encrypt(String.valueOf(this.remaining), encryptionKey));
+        this.totalSavings = Double.parseDouble(encrypt(String.valueOf(this.totalSavings), encryptionKey));
+        this.totalDebt = Double.parseDouble(encrypt(String.valueOf(this.totalDebt), encryptionKey));
+    }
+
+    public void decryptFields(String encryptionKey) throws Exception {
+        this.totalIncome = Double.parseDouble(decrypt(String.valueOf(this.totalIncome), encryptionKey));
+        this.totalExpenses = Double.parseDouble(decrypt(String.valueOf(this.totalExpenses), encryptionKey));
+        this.deficit = Double.parseDouble(decrypt(String.valueOf(this.deficit), encryptionKey));
+        this.remaining = Double.parseDouble(decrypt(String.valueOf(this.remaining), encryptionKey));
+        this.totalSavings = Double.parseDouble(decrypt(String.valueOf(this.totalSavings), encryptionKey));
+        this.totalDebt = Double.parseDouble(decrypt(String.valueOf(this.totalDebt), encryptionKey));
     }
 
     // Getters and Setters
@@ -111,14 +130,6 @@ public class Finance {
 
     public void setTotalDebt(double totalDebt) {
         this.totalDebt = totalDebt;
-    }
-
-    public String getCode() {
-        return this.code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public User getUser() {

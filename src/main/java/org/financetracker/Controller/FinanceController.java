@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.w3c.dom.html.HTMLLabelElement;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.financetracker.Security.Encryption.AesEncryptionUtil.encrypt;
 import static org.financetracker.Security.Encryption.AesEncryptionUtil.decrypt;
@@ -30,21 +32,26 @@ public class FinanceController {
     @Autowired
     private DatasetService datasetService;
 
+    private static final String ENCRYPTED_KEY = System.getenv("ENCRYPTED_KEY");
+
+
     // Finance Endpoints
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/{userId}")
-    public Finance saveFinance(@PathVariable UUID userId, @RequestBody Finance finance) {
+    public Finance saveFinance(@PathVariable UUID userId, @RequestBody Finance finance) throws Exception {
         // Encrypt sensitive fields before saving
-//        finance.setCode(encrypt(finance.getCode()));
+        finance.encryptFields(ENCRYPTED_KEY);
+
         return financeService.saveFinance(userId, finance);
     }
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PutMapping("/{financeId}")
-    public Finance updateFinance(@PathVariable UUID financeId, @RequestBody Finance finance) {
+    public Finance updateFinance(@PathVariable UUID financeId, @RequestBody Finance finance) throws Exception {
         // Encrypt sensitive fields before updating
-//        finance.setCode(encrypt(finance.getCode()));
+        finance.encryptFields(ENCRYPTED_KEY);
+
         return financeService.updateFinance(financeId, finance);
     }
 
@@ -56,19 +63,21 @@ public class FinanceController {
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/{financeId}")
-    public Finance getFinanceById(@PathVariable UUID financeId) {
+    public Finance getFinanceById(@PathVariable UUID financeId) throws Exception {
         Finance finance = financeService.getFinanceById(financeId);
         // Decrypt sensitive fields before returning
-//        finance.setCode(decrypt(finance.getCode()));
+        finance.decryptFields(ENCRYPTED_KEY);
+
         return finance;
     }
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/user/{userId}")
-    public Finance getFinanceByUserId(@PathVariable UUID userId) {
+    public Finance getFinanceByUserId(@PathVariable UUID userId) throws Exception {
         Finance finance = financeService.getFinanceByUserId(userId);
         // Decrypt sensitive fields before returning
-//        finance.setCode(decrypt(finance.getCode()));
+        finance.decryptFields(ENCRYPTED_KEY);
+
         return finance;
     }
 
@@ -77,7 +86,13 @@ public class FinanceController {
     public List<Finance> getAllFinances() {
         List<Finance> finances = financeService.getAllFinances();
         // Decrypt sensitive fields for all records
-//        finances.forEach(finance -> finance.setCode(decrypt(finance.getCode())));
+        finances.forEach(finance -> {
+            try {
+                finance.decryptFields(ENCRYPTED_KEY);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
         return finances;
     }
 
@@ -85,32 +100,47 @@ public class FinanceController {
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/{financeId}/charts")
-    public Chart saveChart(@PathVariable UUID financeId, @RequestBody Chart chart) {
+    public Chart saveChart(@PathVariable UUID financeId, @RequestBody Chart chart) throws Exception {
+        // Encrypt each label and save the list
+        chart.encryptLabels(ENCRYPTED_KEY);
+
         return chartService.saveChart(financeId, chart);
     }
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PutMapping("/charts/{chartId}")
     public Chart updateChart(@PathVariable UUID chartId, @RequestBody Chart chart) {
+        // Encrypt each label and update the list
+        chart.encryptLabels(ENCRYPTED_KEY);
+
         return chartService.updateChart(chartId, chart);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/charts/{chartId}")
     public void deleteChart(@PathVariable UUID chartId) {
+
         chartService.deleteChart(chartId);
     }
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/charts/{chartId}")
-    public Chart getChartById(@PathVariable UUID chartId) {
-        return chartService.getChartById(chartId);
+    public Chart getChartById(@PathVariable UUID chartId) throws Exception {
+        Chart chart = chartService.getChartById(chartId);
+        chart.decryptLabels(ENCRYPTED_KEY);
+
+        return chart;
     }
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/{financeId}/charts")
     public List<Chart> getChartsByFinanceId(@PathVariable UUID financeId) {
-        return chartService.getChartsByFinanceId(financeId);
+        List<Chart> charts = chartService.getChartsByFinanceId(financeId);
+
+        // Decrypt labels for each chart in the list
+        charts.forEach(chart -> chart.decryptLabels(ENCRYPTED_KEY));
+
+        return charts;
     }
 
     // Dataset Endpoints

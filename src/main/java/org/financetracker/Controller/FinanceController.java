@@ -30,7 +30,6 @@ public class FinanceController {
 
 
     // Finance Endpoints
-
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/{userId}")
     public Finance saveFinance(@PathVariable UUID userId, @RequestBody Finance finance) throws Exception {

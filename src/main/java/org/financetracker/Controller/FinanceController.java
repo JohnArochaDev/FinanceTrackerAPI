@@ -6,12 +6,14 @@ import org.financetracker.Modal.Finance;
 import org.financetracker.Service.Chart.ChartService;
 import org.financetracker.Service.Dataset.DatasetService;
 import org.financetracker.Service.Finance.FinanceService;
+import org.financetracker.Util.ChartType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.w3c.dom.html.HTMLLabelElement;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -147,7 +149,7 @@ public class FinanceController {
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/charts/{chartId}/datasets")
-    public Dataset saveDataset(@PathVariable UUID chartId, @RequestBody Dataset dataset) {
+    public Dataset saveDataset(@PathVariable UUID chartId, @RequestBody Dataset dataset) throws Exception {
         dataset.encryptFields(ENCRYPTED_KEY);
 
         return datasetService.saveDataset(chartId, dataset);

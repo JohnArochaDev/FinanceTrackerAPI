@@ -22,6 +22,7 @@ CREATE TABLE finance (
 CREATE TABLE chart (
                        id UUID PRIMARY KEY,
                        labels TEXT NOT NULL, -- JSON array of labels
+                       type VARCHAR(50) NOT NULL,
                        finance_id UUID NOT NULL, -- Foreign key to the finance table
                        CONSTRAINT fk_finance FOREIGN KEY (finance_id) REFERENCES finance(id) ON DELETE CASCADE
 );
@@ -47,10 +48,10 @@ INSERT INTO finance (id, total_income, total_expenses, deficit, remaining, total
     ('22222222-2222-2222-2222-222222222222', 4200, 3500, 700, 700, 1000, 5000, '11111111-1111-1111-1111-111111111111');
 
 -- Insert data into the chart table (barData, pieData, radarData)
-INSERT INTO chart (id, labels, finance_id) VALUES
-                                               ('33333333-3333-3333-3333-333333333333', '["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]', '22222222-2222-2222-2222-222222222222'),
-                                               ('44444444-4444-4444-4444-444444444444', '["Housing", "Debt", "Food", "Transportation", "Dining", "Childcare", "Insurance", "Utilities", "Subscriptions", "Savings"]', '22222222-2222-2222-2222-222222222222'),
-                                               ('55555555-5555-5555-5555-555555555555', '["Housing", "Debt", "Food", "Transportation", "Dining", "Childcare", "Insurance", "Utilities", "Subscriptions", "Savings"]', '22222222-2222-2222-2222-222222222222');
+INSERT INTO chart (id, labels, finance_id, type) VALUES
+                                               ('33333333-3333-3333-3333-333333333333', '["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]', '22222222-2222-2222-2222-222222222222', 'BAR_DATA'),
+                                               ('44444444-4444-4444-4444-444444444444', '["Housing", "Debt", "Food", "Transportation", "Dining", "Childcare", "Insurance", "Utilities", "Subscriptions", "Savings"]', '22222222-2222-2222-2222-222222222222', 'PIE_DATA'),
+                                               ('55555555-5555-5555-5555-555555555555', '["Housing", "Debt", "Food", "Transportation", "Dining", "Childcare", "Insurance", "Utilities", "Subscriptions", "Savings"]', '22222222-2222-2222-2222-222222222222', 'RADAR_DATA');
 
 -- Insert data into the dataset table for barData
 INSERT INTO dataset (id, label, data, background_color, border_color, border_width, chart_id) VALUES

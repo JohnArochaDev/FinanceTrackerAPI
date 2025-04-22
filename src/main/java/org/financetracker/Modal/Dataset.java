@@ -4,7 +4,10 @@ import static org.financetracker.Security.Encryption.AesEncryptionUtil.encrypt;
 import static org.financetracker.Security.Encryption.AesEncryptionUtil.decrypt;
 
 import jakarta.persistence.*;
+import org.financetracker.Util.ChartType;
+
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -32,7 +35,7 @@ public class Dataset {
 
     @ManyToOne
     @JoinColumn(name = "chart_id", nullable = false)
-    private Chart chart; // Many datasets can belong to one chart
+    private Chart chart;
 
     // Methods
     public void encryptFields(String encryptionKey) {

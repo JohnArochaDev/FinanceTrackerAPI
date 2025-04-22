@@ -54,8 +54,8 @@ INSERT INTO chart (id, labels, finance_id) VALUES
 
 -- Insert data into the dataset table for barData
 INSERT INTO dataset (id, label, data, background_color, border_color, border_width, chart_id) VALUES
-                                                                                                  ('66666666-6666-6666-6666-666666666666', 'Spending', '[100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200]', '"rgba(213, 62, 79, 1)"', '"rgb(132, 39, 50)"', 1, '33333333-3333-3333-3333-333333333333'),
-                                                                                                  ('77777777-7777-7777-7777-777777777777', 'Savings', '[1200, 1100, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100]', '"rgba(102, 194, 165, 1)"', '"rgb(70, 130, 111)"', 1, '33333333-3333-3333-3333-333333333333');
+                                                                                                  ('66666666-6666-6666-6666-666666666666', 'Spending', '[100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200]', 'rgba(213, 62, 79, 1)', 'rgb(132, 39, 50)', 1, '33333333-3333-3333-3333-333333333333'),
+                                                                                                  ('77777777-7777-7777-7777-777777777777', 'Savings', '[1200, 1100, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100]', 'rgba(102, 194, 165, 1)', 'rgb(70, 130, 111)', 1, '33333333-3333-3333-3333-333333333333');
 
 -- Insert data into the dataset table for pieData
 INSERT INTO dataset (id, label, data, background_color, border_color, border_width, chart_id) VALUES
@@ -63,4 +63,4 @@ INSERT INTO dataset (id, label, data, background_color, border_color, border_wid
 
 -- Insert data into the dataset table for radarData
 INSERT INTO dataset (id, label, data, background_color, border_color, border_width, chart_id) VALUES
-    ('99999999-9999-9999-9999-999999999999', 'Spending', '[1200, 800, 450, 300, 400, 350, 200, 150, 100, 170]', '"rgba(243, 255, 21, 0.2)"', '"rgb(243, 255, 21)"', 1, '55555555-5555-5555-5555-555555555555');
+    ('99999999-9999-9999-9999-999999999999', 'Spending', '[1200, 800, 450, 300, 400, 350, 200, 150, 100, 170]', 'rgba(243, 255, 21, 0.2)', 'rgb(243, 255, 21)', 1, '55555555-5555-5555-5555-555555555555');

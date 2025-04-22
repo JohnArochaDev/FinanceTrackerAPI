@@ -18,9 +18,8 @@ public class Chart {
     @ElementCollection
     private List<String> labels;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "dataset_id", nullable = false)
-    private Dataset dataset;
+    @OneToMany(mappedBy = "chart", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Dataset> datasets; // A chart can have many datasets
 
     @ManyToOne
     @JoinColumn(name = "finance_id", nullable = false)
@@ -39,7 +38,6 @@ public class Chart {
             .collect(Collectors.toList());
     }
 
-    // Method to decrypt labels
     public void decryptLabels(String encryptionKey) {
         this.labels = this.labels.stream()
             .map(label -> {
@@ -69,12 +67,12 @@ public class Chart {
         this.labels = labels;
     }
 
-    public Dataset getDataset() {
-        return dataset;
+    public List<Dataset> getDatasets() {
+        return datasets;
     }
 
-    public void setDataset(Dataset dataset) {
-        this.dataset = dataset;
+    public void setDatasets(List<Dataset> datasets) {
+        this.datasets = datasets;
     }
 
     public Finance getFinance() {

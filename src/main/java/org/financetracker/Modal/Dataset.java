@@ -26,8 +26,9 @@ public class Dataset {
     @Column(nullable = false)
     private int borderWidth;
 
-    @OneToOne(mappedBy = "dataset", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Chart chart;
+    @ManyToOne
+    @JoinColumn(name = "chart_id", nullable = false)
+    private Chart chart; // Many datasets can belong to one chart
 
     // Getters and Setters
     public UUID getId() {

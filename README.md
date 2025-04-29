@@ -4,6 +4,3 @@
 3. Marry the FE and BE together, and run tests.
 4. Add business logic for the user's maximum budget, deficit, amount of $ left over, complete all of that on the back end.
 5. Add a slideshow registration to a new user on the FE, with a variable that tells the FE if the user has completed registration or not.
-
-
-(Also encrypt starter data in the DB population file so you can use that data without decryption errors)

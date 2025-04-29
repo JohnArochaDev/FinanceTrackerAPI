@@ -53,7 +53,7 @@ public class FinanceController {
         return financeService.updateFinance(financeId, finance);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @DeleteMapping("/{financeId}")
     public void deleteFinance(@PathVariable UUID financeId) {
         financeService.deleteFinance(financeId);

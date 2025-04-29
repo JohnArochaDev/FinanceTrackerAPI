@@ -3,6 +3,7 @@ package org.financetracker.Modal;
 import static org.financetracker.Security.Encryption.AesEncryptionUtil.encrypt;
 import static org.financetracker.Security.Encryption.AesEncryptionUtil.decrypt;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -43,6 +44,7 @@ public class Finance {
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = true)
+    @JsonBackReference
     private User user;
 
     @OneToMany(mappedBy = "finance", cascade = CascadeType.ALL, orphanRemoval = true)

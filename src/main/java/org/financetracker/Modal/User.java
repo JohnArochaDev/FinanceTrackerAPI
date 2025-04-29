@@ -2,6 +2,7 @@ package org.financetracker.Modal;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,6 +30,7 @@ public class User {
     private String role; // Add the role field
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, optional = true)
+    @JsonManagedReference
     private Finance finance;
 
     // Constructors

@@ -51,9 +51,6 @@ public class FinanceServiceImpl implements FinanceService {
         return financeRepository.save(finance);
     }
 
-
-
-
     @Override
     public Finance updateFinance(UUID financeId, Finance finance) {
         Optional<Finance> existingFinance = financeRepository.findById(financeId);

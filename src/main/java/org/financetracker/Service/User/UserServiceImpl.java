@@ -49,15 +49,13 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
     @Override
     public Optional<User> findByUsername(String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (optionalUser.isPresent()) {
-            return optionalUser;
-        } else {
-            throw new RuntimeException("Finance not found");
-        }
+        return userRepository.findByUsername(username);
     }
+
+
 
     @Override
     public void login(String username, String password) {

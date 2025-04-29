@@ -38,7 +38,7 @@ public class Finance {
     private double totalDebt;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
 
     @OneToMany(mappedBy = "finance", cascade = CascadeType.ALL, orphanRemoval = true)

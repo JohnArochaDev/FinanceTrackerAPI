@@ -28,7 +28,7 @@ public class User {
     @Column(nullable = false)
     private String role; // Add the role field
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, optional = true)
     private Finance finance;
 
     // Constructors
@@ -75,6 +75,8 @@ public class User {
 
     public void setFinance(Finance finance) {
         this.finance = finance;
-        finance.setUser(this);
+        if (finance != null) {
+            finance.setUser(this);
+        }
     }
 }

@@ -49,6 +49,17 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<User> createUser(@RequestBody User user) {
+        // Check if username is provided
+        if (user.getUsername() == null || user.getUsername().isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        // Check if user already exists
+        Optional<User> existingUser = userService.findByUsername(user.getUsername());
+        if (existingUser.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
         // Set default role to USER if not provided
         if (user.getRole() == null || user.getRole().isEmpty()) {
             user.setRole("USER");

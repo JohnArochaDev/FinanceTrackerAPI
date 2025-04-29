@@ -1,6 +1,7 @@
 package org.financetracker.Controller;
 
 import org.financetracker.Modal.Dto.LoginRequest;
+import org.financetracker.Modal.Dto.LoginResponse;
 import org.financetracker.Modal.User;
 import org.financetracker.Security.Jwt.JwtUtil;
 import org.financetracker.Service.User.UserService;
@@ -86,7 +87,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         String username = loginRequest.getUsername();
         String rawPassword = loginRequest.getPassword();
 
@@ -96,12 +97,14 @@ public class UserController {
 
             if (passwordEncoder.matches(rawPassword, user.getPassword())) {
                 String token = jwtUtil.generateToken(username);
-                return ResponseEntity.ok(token);
+                LoginResponse loginResponse = new LoginResponse(user.getId(), token);
+                return ResponseEntity.ok(loginResponse);
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new LoginResponse(null, "Invalid username or password"));
             }
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new LoginResponse(null, "Invalid username or password"));
         }
     }
+
 }

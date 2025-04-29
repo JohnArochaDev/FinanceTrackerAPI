@@ -69,6 +69,7 @@ public class FinanceController {
         return finance;
     }
 
+    // this is the route a user will use to access their finances
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/user/{userId}")
     public Finance getFinanceByUserId(@PathVariable UUID userId) throws Exception {
@@ -123,10 +124,9 @@ public class FinanceController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/charts/{chartId}")
     public Chart getChartById(@PathVariable UUID chartId) throws Exception {
-        Chart chart = chartService.getChartById(chartId);
-        chart.decryptLabels(ENCRYPTED_KEY);
+        //        chart.decryptLabels(ENCRYPTED_KEY);
 
-        return chart;
+        return chartService.getChartById(chartId);
     }
 
     @PreAuthorize("hasRole('USER')")

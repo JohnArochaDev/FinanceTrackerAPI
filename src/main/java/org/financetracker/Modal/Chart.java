@@ -3,6 +3,8 @@ package org.financetracker.Modal;
 import static org.financetracker.Security.Encryption.AesEncryptionUtil.encrypt;
 import static org.financetracker.Security.Encryption.AesEncryptionUtil.decrypt;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.financetracker.Util.ChartType;
 
@@ -33,10 +35,12 @@ public class Chart {
     private ChartType type;
 
     @OneToMany(mappedBy = "chart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Dataset> datasets;
 
     @ManyToOne
     @JoinColumn(name = "finance_id", nullable = false)
+    @JsonBackReference
     private Finance finance;
 
     private static final Set<ChartType> VALID_TYPES = Set.of(

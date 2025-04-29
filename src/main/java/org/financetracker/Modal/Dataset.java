@@ -3,9 +3,8 @@ package org.financetracker.Modal;
 import static org.financetracker.Security.Encryption.AesEncryptionUtil.encrypt;
 import static org.financetracker.Security.Encryption.AesEncryptionUtil.decrypt;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import org.financetracker.Util.ChartType;
-
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -40,6 +39,7 @@ public class Dataset {
 
     @ManyToOne
     @JoinColumn(name = "chart_id", nullable = false)
+    @JsonBackReference
     private Chart chart;
 
     // Methods

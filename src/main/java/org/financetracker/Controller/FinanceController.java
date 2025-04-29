@@ -7,7 +7,6 @@ import org.financetracker.Service.Chart.ChartService;
 import org.financetracker.Service.Dataset.DatasetService;
 import org.financetracker.Service.Finance.FinanceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +32,7 @@ public class FinanceController {
     // Finance Endpoints
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/{userId}")
-    public ResponseEntity<String> saveFinance(@PathVariable UUID userId, @RequestBody Finance finance) {
+    public Finance saveFinance(@PathVariable UUID userId, @RequestBody Finance finance) {
         try {
             // Encrypt sensitive fields before saving
             finance.encryptFields(ENCRYPTED_KEY);

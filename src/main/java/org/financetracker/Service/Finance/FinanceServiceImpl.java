@@ -8,8 +8,6 @@ import org.financetracker.Repository.DatasetRepository;
 import org.financetracker.Repository.FinanceRepository;
 import org.financetracker.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,25 +30,27 @@ public class FinanceServiceImpl implements FinanceService {
     private DatasetRepository datasetRepository;
 
     @Override
-    public ResponseEntity<String> saveFinance(UUID userId, Finance finance) {
+    public Finance saveFinance(UUID userId, Finance finance) {
         Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body("User not found with ID: " + userId);
+            throw new RuntimeException("User not found with ID: " + userId);
         }
 
         finance.setUser(user.get());
         finance.getCharts().forEach(chart -> {
             chart.setFinance(finance); // Set finance reference in each chart
-            chart.getDatasets().forEach(dataset -> {
-                dataset.setChart(chart); // Set chart reference in each dataset
-            });
+            if (chart.getDatasets() != null) {
+                chart.getDatasets().forEach(dataset -> {
+                    if (dataset.getChart() == null) {
+                        dataset.setChart(chart); // Set chart reference in each dataset only if not already set
+                    }
+                });
+            }
         });
 
-        financeRepository.save(finance);
-        return ResponseEntity.status(HttpStatus.OK)
-            .body("Finance saved successfully for user ID: " + userId);
+        return financeRepository.save(finance);
     }
+
 
 
 

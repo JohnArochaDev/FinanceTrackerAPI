@@ -3,22 +3,18 @@ package org.financetracker.Modal;
 import static org.financetracker.Security.Encryption.AesEncryptionUtil.encrypt;
 import static org.financetracker.Security.Encryption.AesEncryptionUtil.decrypt;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Finance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
 
     @PrePersist
     protected void onCreate() {
@@ -26,7 +22,6 @@ public class Finance {
             id = UUID.randomUUID();
         }
     }
-
 
     @Column(nullable = false)
     private String totalIncome;
@@ -51,6 +46,7 @@ public class Finance {
     private User user;
 
     @OneToMany(mappedBy = "finance", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Chart> charts;
 
     // Constructors
@@ -83,7 +79,6 @@ public class Finance {
         this.totalSavings = decrypt(this.totalSavings, encryptionKey);
         this.totalDebt = decrypt(this.totalDebt, encryptionKey);
     }
-
 
     // Getters and Setters
     public UUID getId() {

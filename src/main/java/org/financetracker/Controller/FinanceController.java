@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/finance")
+@RequestMapping("/finance")
 public class FinanceController {
 
     @Autowired
@@ -32,12 +32,17 @@ public class FinanceController {
     // Finance Endpoints
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/{userId}")
-    public Finance saveFinance(@PathVariable UUID userId, @RequestBody Finance finance) throws Exception {
-        // Encrypt sensitive fields before saving
-        finance.encryptFields(ENCRYPTED_KEY);
+    public Finance saveFinance(@PathVariable UUID userId, @RequestBody Finance finance) {
+        try {
+            // Encrypt sensitive fields before saving
+            finance.encryptFields(ENCRYPTED_KEY);
+        } catch (Exception e) {
+            throw new RuntimeException("Encryption failed: " + e.getMessage());
+        }
 
         return financeService.saveFinance(userId, finance);
     }
+
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PutMapping("/{financeId}")

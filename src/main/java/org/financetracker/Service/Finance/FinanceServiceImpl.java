@@ -38,8 +38,11 @@ public class FinanceServiceImpl implements FinanceService {
         }
 
         finance.setUser(user.get());
-        return financeRepository.save(finance);
+        Finance savedFinance = financeRepository.save(finance);
+        System.out.println("Finance saved successfully for user ID: " + userId);
+        return savedFinance;
     }
+
 
     @Override
     public Finance updateFinance(UUID financeId, Finance finance) {

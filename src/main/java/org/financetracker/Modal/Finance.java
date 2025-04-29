@@ -20,22 +20,22 @@ public class Finance {
     private UUID id;
 
     @Column(nullable = false)
-    private double totalIncome;
+    private String totalIncome;
 
     @Column(nullable = false)
-    private double totalExpenses;
+    private String totalExpenses;
 
     @Column(nullable = false)
-    private double deficit;
+    private String deficit;
 
     @Column(nullable = false)
-    private double remaining;
+    private String remaining;
 
     @Column(nullable = false)
-    private double totalSavings;
+    private String totalSavings;
 
     @Column(nullable = false)
-    private double totalDebt;
+    private String totalDebt;
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = true)
@@ -47,7 +47,7 @@ public class Finance {
     // Constructors
     public Finance() {}
 
-    public Finance(double totalIncome, double totalExpenses, double deficit, double remaining, double totalSavings, double totalDebt, String code) {
+    public Finance(String totalIncome, String totalExpenses, String deficit, String remaining, String totalSavings, String totalDebt) {
         this.totalIncome = totalIncome;
         this.totalExpenses = totalExpenses;
         this.deficit = deficit;
@@ -58,22 +58,23 @@ public class Finance {
 
     // Methods
     public void encryptFields(String encryptionKey) throws Exception {
-        this.totalIncome = Double.parseDouble(encrypt(String.valueOf(this.totalIncome), encryptionKey));
-        this.totalExpenses = Double.parseDouble(encrypt(String.valueOf(this.totalExpenses), encryptionKey));
-        this.deficit = Double.parseDouble(encrypt(String.valueOf(this.deficit), encryptionKey));
-        this.remaining = Double.parseDouble(encrypt(String.valueOf(this.remaining), encryptionKey));
-        this.totalSavings = Double.parseDouble(encrypt(String.valueOf(this.totalSavings), encryptionKey));
-        this.totalDebt = Double.parseDouble(encrypt(String.valueOf(this.totalDebt), encryptionKey));
+        this.totalIncome = encrypt(String.valueOf(this.totalIncome), encryptionKey);
+        this.totalExpenses = encrypt(String.valueOf(this.totalExpenses), encryptionKey);
+        this.deficit = encrypt(String.valueOf(this.deficit), encryptionKey);
+        this.remaining = encrypt(String.valueOf(this.remaining), encryptionKey);
+        this.totalSavings = encrypt(String.valueOf(this.totalSavings), encryptionKey);
+        this.totalDebt = encrypt(String.valueOf(this.totalDebt), encryptionKey);
     }
 
     public void decryptFields(String encryptionKey) throws Exception {
-        this.totalIncome = Double.parseDouble(decrypt(String.valueOf(this.totalIncome), encryptionKey));
-        this.totalExpenses = Double.parseDouble(decrypt(String.valueOf(this.totalExpenses), encryptionKey));
-        this.deficit = Double.parseDouble(decrypt(String.valueOf(this.deficit), encryptionKey));
-        this.remaining = Double.parseDouble(decrypt(String.valueOf(this.remaining), encryptionKey));
-        this.totalSavings = Double.parseDouble(decrypt(String.valueOf(this.totalSavings), encryptionKey));
-        this.totalDebt = Double.parseDouble(decrypt(String.valueOf(this.totalDebt), encryptionKey));
+        this.totalIncome = decrypt(this.totalIncome, encryptionKey);
+        this.totalExpenses = decrypt(this.totalExpenses, encryptionKey);
+        this.deficit = decrypt(this.deficit, encryptionKey);
+        this.remaining = decrypt(this.remaining, encryptionKey);
+        this.totalSavings = decrypt(this.totalSavings, encryptionKey);
+        this.totalDebt = decrypt(this.totalDebt, encryptionKey);
     }
+
 
     // Getters and Setters
     public UUID getId() {
@@ -84,51 +85,51 @@ public class Finance {
         this.id = id;
     }
 
-    public double getTotalIncome() {
+    public String getTotalIncome() {
         return this.totalIncome;
     }
 
-    public void setTotalIncome(double totalIncome) {
+    public void setTotalIncome(String totalIncome) {
         this.totalIncome = totalIncome;
     }
 
-    public double getTotalExpenses() {
+    public String getTotalExpenses() {
         return this.totalExpenses;
     }
 
-    public void setTotalExpenses(double totalExpenses) {
+    public void setTotalExpenses(String totalExpenses) {
         this.totalExpenses = totalExpenses;
     }
 
-    public double getDeficit() {
+    public String getDeficit() {
         return this.deficit;
     }
 
-    public void setDeficit(double deficit) {
+    public void setDeficit(String deficit) {
         this.deficit = deficit;
     }
 
-    public double getRemaining() {
+    public String getRemaining() {
         return this.remaining;
     }
 
-    public void setRemaining(double remaining) {
+    public void setRemaining(String remaining) {
         this.remaining = remaining;
     }
 
-    public double getTotalSavings() {
+    public String getTotalSavings() {
         return this.totalSavings;
     }
 
-    public void setTotalSavings(double totalSavings) {
+    public void setTotalSavings(String totalSavings) {
         this.totalSavings = totalSavings;
     }
 
-    public double getTotalDebt() {
+    public String getTotalDebt() {
         return this.totalDebt;
     }
 
-    public void setTotalDebt(double totalDebt) {
+    public void setTotalDebt(String totalDebt) {
         this.totalDebt = totalDebt;
     }
 

@@ -2,6 +2,7 @@ package org.financetracker.Service.Finance;
 
 import org.financetracker.Modal.Chart;
 import org.financetracker.Modal.Finance;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.UUID;
@@ -9,7 +10,7 @@ import java.util.UUID;
 public interface FinanceService {
 
     // Save a new finance record
-    Finance saveFinance(UUID userId, Finance finance);
+    ResponseEntity<String> saveFinance(UUID userId, Finance finance);
 
     // Update an existing finance record
     Finance updateFinance(UUID financeId, Finance finance);

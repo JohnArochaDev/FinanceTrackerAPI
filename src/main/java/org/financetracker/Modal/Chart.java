@@ -9,7 +9,7 @@ import org.financetracker.Util.ChartType;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 public class Chart {
@@ -18,15 +18,22 @@ public class Chart {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ElementCollection
-    private List<String> labels;
+    @PrePersist
+    protected void onCreate() {
+        if (id == null) {
+            id = UUID.randomUUID();
+        }
+    }
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING) // Persist as a string in the database
+    private String[] labels;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private ChartType type;
 
     @OneToMany(mappedBy = "chart", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Dataset> datasets; // A chart can have many datasets
+    private List<Dataset> datasets;
 
     @ManyToOne
     @JoinColumn(name = "finance_id", nullable = false)
@@ -47,27 +54,27 @@ public class Chart {
     }
 
     public void encryptLabels(String encryptionKey) {
-        this.labels = this.labels.stream()
+        this.labels = Stream.of(this.labels)
             .map(label -> {
                 try {
-                    return encrypt(label, encryptionKey); // Encrypt each label
+                    return encrypt(label, encryptionKey);
                 } catch (Exception e) {
                     throw new RuntimeException("Failed to encrypt label: " + label, e);
                 }
             })
-            .collect(Collectors.toList());
+            .toArray(String[]::new);
     }
 
     public void decryptLabels(String encryptionKey) {
-        this.labels = this.labels.stream()
+        this.labels = Stream.of(this.labels)
             .map(label -> {
                 try {
-                    return decrypt(label, encryptionKey); // Decrypt each label
+                    return decrypt(label, encryptionKey);
                 } catch (Exception e) {
                     throw new RuntimeException("Failed to decrypt label: " + label, e);
                 }
             })
-            .collect(Collectors.toList());
+            .toArray(String[]::new);
     }
 
     // Getters and Setters
@@ -79,11 +86,11 @@ public class Chart {
         this.id = id;
     }
 
-    public List<String> getLabels() {
+    public String[] getLabels() {
         return labels;
     }
 
-    public void setLabels(List<String> labels) {
+    public void setLabels(String[] labels) {
         this.labels = labels;
     }
 

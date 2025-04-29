@@ -19,6 +19,15 @@ public class Finance {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+
+    @PrePersist
+    protected void onCreate() {
+        if (id == null) {
+            id = UUID.randomUUID();
+        }
+    }
+
+
     @Column(nullable = false)
     private String totalIncome;
 

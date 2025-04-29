@@ -38,10 +38,28 @@ public class FinanceServiceImpl implements FinanceService {
         }
 
         finance.setUser(user.get());
+        finance.getCharts().forEach(chart -> {
+            chart.setFinance(finance); // Set finance reference in each chart
+            if (chart.getLabels() == null || chart.getLabels().length == 0) {
+                throw new RuntimeException("Labels cannot be null or empty");
+            }
+            chart.getDatasets().forEach(dataset -> {
+                dataset.setChart(chart); // Set chart reference in each dataset
+                System.out.println("Dataset ID: " + dataset.getId() + ", Chart ID: " + chart.getId());
+                assert dataset.getChart() != null : "Dataset chart reference is null";
+            });
+            System.out.println("Chart ID: " + chart.getId() + ", Finance ID: " + finance.getId());
+            assert chart.getFinance() != null : "Chart finance reference is null";
+        });
         Finance savedFinance = financeRepository.save(finance);
-        System.out.println("Finance saved successfully for user ID: " + userId);
+        System.out.println("Finance saved successfully for user ID: " + userId + ", Finance ID: " + savedFinance.getId());
         return savedFinance;
     }
+
+
+
+
+
 
 
     @Override

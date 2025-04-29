@@ -6,10 +6,8 @@ import static org.financetracker.Security.Encryption.AesEncryptionUtil.decrypt;
 import jakarta.persistence.*;
 import org.financetracker.Util.ChartType;
 
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 public class Dataset {
@@ -18,17 +16,24 @@ public class Dataset {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @PrePersist
+    protected void onCreate() {
+        if (id == null) {
+            id = UUID.randomUUID();
+        }
+    }
+
     @Column(nullable = false)
     private String label;
 
-    @ElementCollection
-    private List<Double> data;
+    @Column(nullable = false)
+    private double[] data;
 
-    @ElementCollection
-    private List<String> backgroundColor;
+    @Column(nullable = false)
+    private String[] backgroundColor;
 
-    @ElementCollection
-    private List<String> borderColor;
+    @Column(nullable = false)
+    private String[] borderColor;
 
     @Column(nullable = false)
     private int borderWidth;
@@ -41,16 +46,16 @@ public class Dataset {
     public void encryptFields(String encryptionKey) {
         try {
             this.label = encrypt(this.label, encryptionKey);
-            this.data = this.data.stream()
-                .map(value -> {
+            this.data = Stream.of(this.data)
+                .mapToDouble(value -> {
                     try {
                         return Double.parseDouble(encrypt(String.valueOf(value), encryptionKey));
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 })
-                .collect(Collectors.toList());
-            this.backgroundColor = this.backgroundColor.stream()
+                .toArray();
+            this.backgroundColor = Stream.of(this.backgroundColor)
                 .map(color -> {
                     try {
                         return encrypt(color, encryptionKey);
@@ -58,8 +63,8 @@ public class Dataset {
                         throw new RuntimeException(e);
                     }
                 })
-                .collect(Collectors.toList());
-            this.borderColor = this.borderColor.stream()
+                .toArray(String[]::new);
+            this.borderColor = Stream.of(this.borderColor)
                 .map(color -> {
                     try {
                         return encrypt(color, encryptionKey);
@@ -67,7 +72,7 @@ public class Dataset {
                         throw new RuntimeException(e);
                     }
                 })
-                .collect(Collectors.toList());
+                .toArray(String[]::new);
         } catch (Exception e) {
             throw new RuntimeException("Failed to encrypt Dataset fields", e);
         }
@@ -77,16 +82,16 @@ public class Dataset {
     public void decryptFields(String encryptionKey) {
         try {
             this.label = decrypt(this.label, encryptionKey);
-            this.data = this.data.stream()
-                .map(value -> {
+            this.data = Stream.of(this.data)
+                .mapToDouble(value -> {
                     try {
                         return Double.parseDouble(decrypt(String.valueOf(value), encryptionKey));
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 })
-                .collect(Collectors.toList());
-            this.backgroundColor = this.backgroundColor.stream()
+                .toArray();
+            this.backgroundColor = Stream.of(this.backgroundColor)
                 .map(color -> {
                     try {
                         return decrypt(color, encryptionKey);
@@ -94,8 +99,8 @@ public class Dataset {
                         throw new RuntimeException(e);
                     }
                 })
-                .collect(Collectors.toList());
-            this.borderColor = this.borderColor.stream()
+                .toArray(String[]::new);
+            this.borderColor = Stream.of(this.borderColor)
                 .map(color -> {
                     try {
                         return decrypt(color, encryptionKey);
@@ -103,7 +108,7 @@ public class Dataset {
                         throw new RuntimeException(e);
                     }
                 })
-                .collect(Collectors.toList());
+                .toArray(String[]::new);
         } catch (Exception e) {
             throw new RuntimeException("Failed to decrypt Dataset fields", e);
         }
@@ -126,27 +131,27 @@ public class Dataset {
         this.label = label;
     }
 
-    public List<Double> getData() {
+    public double[] getData() {
         return data;
     }
 
-    public void setData(List<Double> data) {
+    public void setData(double[] data) {
         this.data = data;
     }
 
-    public List<String> getBackgroundColor() {
+    public String[] getBackgroundColor() {
         return backgroundColor;
     }
 
-    public void setBackgroundColor(List<String> backgroundColor) {
+    public void setBackgroundColor(String[] backgroundColor) {
         this.backgroundColor = backgroundColor;
     }
 
-    public List<String> getBorderColor() {
+    public String[] getBorderColor() {
         return borderColor;
     }
 
-    public void setBorderColor(List<String> borderColor) {
+    public void setBorderColor(String[] borderColor) {
         this.borderColor = borderColor;
     }
 

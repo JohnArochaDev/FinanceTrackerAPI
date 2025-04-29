@@ -100,7 +100,7 @@ public class FinanceController {
     @PostMapping("/{financeId}/charts")
     public Chart saveChart(@PathVariable UUID financeId, @RequestBody Chart chart) throws Exception {
         // Encrypt each label and save the list
-        chart.encryptLabels(ENCRYPTED_KEY);
+//        chart.encryptLabels(ENCRYPTED_KEY);
 
         return chartService.saveChart(financeId, chart);
     }
@@ -109,7 +109,7 @@ public class FinanceController {
     @PutMapping("/charts/{chartId}")
     public Chart updateChart(@PathVariable UUID chartId, @RequestBody Chart chart) {
         // Encrypt each label and update the list
-        chart.encryptLabels(ENCRYPTED_KEY);
+//        chart.encryptLabels(ENCRYPTED_KEY);
 
         return chartService.updateChart(chartId, chart);
     }
@@ -129,15 +129,15 @@ public class FinanceController {
         return chartService.getChartById(chartId);
     }
 
+    // Will use this to get charts for a user if necessary
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/{financeId}/charts")
     public List<Chart> getChartsByFinanceId(@PathVariable UUID financeId) {
-        List<Chart> charts = chartService.getChartsByFinanceId(financeId);
 
         // Decrypt labels for each chart in the list
-        charts.forEach(chart -> chart.decryptLabels(ENCRYPTED_KEY));
+//        charts.forEach(chart -> chart.decryptLabels(ENCRYPTED_KEY));
 
-        return charts;
+        return chartService.getChartsByFinanceId(financeId);
     }
 
     // Dataset Endpoints
@@ -145,7 +145,7 @@ public class FinanceController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/charts/{chartId}/datasets")
     public Dataset saveDataset(@PathVariable UUID chartId, @RequestBody Dataset dataset) throws Exception {
-        dataset.encryptFields(ENCRYPTED_KEY);
+//        dataset.encryptFields(ENCRYPTED_KEY);
 
         return datasetService.saveDataset(chartId, dataset);
     }
@@ -153,7 +153,7 @@ public class FinanceController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PutMapping("/datasets/{datasetId}")
     public Dataset updateDataset(@PathVariable UUID datasetId, @RequestBody Dataset dataset) {
-        dataset.encryptFields(ENCRYPTED_KEY);
+//        dataset.encryptFields(ENCRYPTED_KEY);
 
         return datasetService.updateDataset(datasetId, dataset);
     }
@@ -167,9 +167,8 @@ public class FinanceController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/datasets/{datasetId}")
     public Dataset getDatasetById(@PathVariable UUID datasetId) {
-        Dataset dataset = datasetService.getDatasetById(datasetId);
-        dataset.decryptFields(ENCRYPTED_KEY);
+        //        dataset.decryptFields(ENCRYPTED_KEY);
 
-        return dataset;
+        return datasetService.getDatasetById(datasetId);
     }
 }
